@@ -1,0 +1,322 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Open+Sans:ital,wght@0,400;0,500;0,600;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+body{
+    font-family: 'Open Sans', sans-serif;
+    /*font-family: 'Barlow', sans-serif;*/
+
+}
+
+a{
+    text-decoration: none;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #65c6f8;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(6, 95, 150, 0.88);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb {
+    background: rgba(1, 52, 84, 1);
+    border: 2px solid #65c6f8;
+    border-radius: 5px;
+}
+
+.slider{
+    height: 90vh;
+    background: url("/assets/images/slider-bg.jpg") no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+.slider .carousel{
+    height: 80%;
+    margin-top: 10vh;
+}
+.slider .carousel-inner{
+    height: 100%;
+    position: relative;
+}
+.carousel-item{
+    height: 100%;
+}
+.header{
+    background: rgba(255,255,255,1);
+    border-bottom: 1px solid #ddd;
+    height: 50px;
+}
+.header .menu ul{
+    width: 100%;
+    display: flex;
+    height: 50px;
+}
+.header .menu ul li{
+    list-style: none;
+}
+
+.header .menu ul li a{
+    text-decoration: none;
+    color: rgb(2, 77, 124);
+    display: block;
+    position: relative;
+}
+.header .menu ul li a:hover,
+.header .menu ul li a.active{
+    background: aliceblue;
+}
+
+.header .menu ul li a:hover::after,
+.header .menu ul li a.active::after{
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: #707070;
+}
+
+.header .menu ul li ul{
+    width:250px;
+    background:#004f7c;
+    padding: 0;
+    height: max-content;
+    top: 50px;
+    position: absolute;
+    display: none;
+}
+.header .menu ul li ul::before{
+    content:'';
+    width: 15px;
+    height: 12px;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    background:#004f7c;
+    position: absolute;
+    top: -10px;
+    display: block;
+    left: 30px;
+}
+.header .menu ul li ul li{
+    display: block;
+    width: 100%;
+}
+.header .menu ul li ul li a{
+    /*background: rgba(255,255,255,0.1);*/
+    display: block;
+    color: #fff;
+    font-size: 14px;
+    line-height: 34px;
+    padding: 5px 15px;
+}
+.header .menu ul li ul li a:hover,.header .menu ul li ul li a.active {
+    background: rgba(255, 255, 255, 0.1);
+}
+.header .menu ul li:hover ul{
+    display: block!important;
+}
+
+
+.header .logo{
+    font-family: Tahoma;
+    color: #062596;
+    font-weight: bolder;
+}
+
+.authentication img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.authentication .auth-nav li{
+    display: inline-block;
+}
+.authentication .auth-nav li li{
+    display: block;
+}
+.authentication .auth-nav {
+    height: 50px;
+    padding: 0;
+    margin: 0;
+    align-items: center;
+    display: flex;
+    justify-content: end;
+}
+.star-icon{
+    width: 12px;
+    height: 12px;
+}
+.stars {
+    position: absolute;
+    top: 200px;
+    background: #004f7c;
+    padding: 0 10px;
+    left: -12px;
+    height: 25px;
+}
+.stars::after{
+    content: '';
+    width: 12px;
+    height: 8px;
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+    background: #01263b;
+    left: 0px;
+    display: block;
+    position: absolute;
+    bottom: -7px;
+}
+
+.card-image{
+    width: 100%;
+    height: 250px;
+    position: relative;
+}
+.card-image img.card-img-top{
+    height: 100%;
+    width: 100%;
+}
+.section-title{
+    position: relative;
+    width: 100%;
+    height: 45px;
+    margin-bottom: 30px;
+}
+.section-title::after{
+    content: '';
+    width: 100%;
+    position: absolute;
+    height: 1px;
+    background: #01263b;
+    bottom: 5px;
+    display: block;
+}
+.section-title::before{
+    content: '';
+    width: 100%;
+    position: absolute;
+    height: 1px;
+    background: #01263b;
+    bottom: 15px;
+    display: block;
+}
+.section-title h3{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 20px;
+    width: auto;
+    background: #FFFFFF;
+    line-height: 45px;
+    font-family: 'Barlow', sans-serif;
+    font-weight: bold;
+    padding: 0 15px;
+}
+
+.footer{
+    background-image: url("/assets/images/footer-bg.png");
+    height: 350px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom;
+    background-attachment: fixed;
+    align-items: center;
+    display: flex;
+    text-align: center;
+    position: relative;
+}
+.footer::before{
+    content: '';
+    width: 100%;
+    background-image: linear-gradient(rgb(0, 0, 0), rgba(0, 0, 0, 0.1));
+    height: 100%;
+    display: block;
+    position: absolute;
+}
+
+img.icon{
+    width: 25px!important;
+    height: 25px!important;
+}
+.dropdown-toggle.no-arrow::after{
+    display: none;
+}
+.dropdown-toggle{
+    margin: 0 10px;
+}
+
+.art .star-icon{
+    width: 10px;
+    height: 10px;
+}
+
+/* about page */
+.page-title{
+    margin-top: 50px;
+    background-image: url("/assets/images/title-bg.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    height: 150px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+}
+.page-title h1{
+    text-align: center;
+    width: 100%;
+    color: #FFFFFF;
+    font-family: 'Open Sans', sans-serif;
+    text-transform: uppercase;
+    font-size: 55px;
+    font-weight: 900;
+}
+.about-text{
+    text-align: justify;
+    font-family: 'Barlow', sans-serif;
+    font-size: 20px;
+    line-height: 27px;
+    margin-bottom: 15px;
+}
+a{
+    text-decoration: none;
+}
+
+.fixTableHead {
+    overflow-y: auto;
+    height: 110px;
+}
+.fixTableHead thead th {
+    position: sticky;
+    top: 0;
+}
+
+th,
+td {
+    padding: 8px 15px;
+    border: 2px solid #529432;
+}
+th {
+    background: #ABDD93;
+}
+
+.h-500{
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.alert{
+    position: fixed;
+    right: 0;
+    top: 60px;
+    padding: 5px 15px;
+}

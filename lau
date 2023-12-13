@@ -1,0 +1,21 @@
+project-root/
+|-- css/
+|   |-- styles.css
+|-- images/
+|   |-- art-images/
+|       |-- artists/
+|       |-- artworks/
+|       |-- genres/
+|       |-- subjects/
+|-- includes/
+|   |-- header.php
+|   |-- footer.php
+|   |-- navigation.php
+|-- pages/
+|   |-- home.php
+|   |-- about.php
+|   |-- browse_artists.php
+|   |-- browse_artworks.php
+|   |-- browse_genres.php
+|   |-- browse_subjects.php
+|-- index.php
