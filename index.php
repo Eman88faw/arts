@@ -37,10 +37,24 @@ $cc=$conn->query($ar);
     <?php include BL.'includes/footer.php'; ?>
 
     <script>
+        /*
         // Set a timer to trigger the session destroy after 5 seconds
         var myElement = document.getElementsByClassName("alert");
         setTimeout(function() {
             myElement[0].remove();
         }, 5000); // 5000 milliseconds = 5 seconds
+
+        $('.imgLargeView span').on('click', function(){
+            $('.imgLargeView').hide();
+        });
+
+        $('img.imgWork').on('click',function(){
+            src = $(this).data('img-large');
+            $('.imgLargeView').show();
+        })
+          */  
+
+
+
     </script>
 </body>
