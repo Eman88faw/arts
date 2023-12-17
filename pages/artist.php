@@ -19,9 +19,9 @@ function artistData($conn){
                         <p><b>Year Of Birth</b> :  '.$result[0]["YearOfBirth"].'</p>
                         <p><b>Nationality</b> :  '.$result[0]["Nationality"].'</p>
                         <p><b>Details</b> :  '.$result[0]["Details"].'</p>
+                        '.wishlist($conn).'
                     </div>
                 </div>';
-
     return $output;
 }
 
@@ -56,7 +56,6 @@ function ArtworksperArtist($conn)
     }
     return $artist_works;
 }
-
 ?>
 <div class="title bg-dark ">
     <div class="container">

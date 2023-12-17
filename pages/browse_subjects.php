@@ -1,7 +1,5 @@
 <?php
-$sort_order = isset($_GET['order']) && strtolower($_GET['order']) == 'desc' ? 'DESC' : 'ASC';
-
-$anfrage="select * from Subjects ORDER BY SubjectName $sort_order";
+$anfrage="select * from Subjects ORDER BY SubjectName DESC";
 $c=$conn->prepare($anfrage);
 $c->execute();
 
@@ -14,18 +12,6 @@ $c->execute();
     </div>
 </div>
 <div class="container">
-    <div class="row text-end my-3">
-
-        <span>
-           <span style="line-height: 40px"> SORT :</span>
-            <a href="?page=browse_subjects&order=ASC" class="float-end ml-3">
-                <img src="<?=ASSETS?>images/sort-a-to-z.svg" width="40" alt="">
-            </a>
-            <a href="?page=browse_subjects&order=DESC" class="float-end me-1">
-                 <img src="<?=ASSETS?>images/sort-z-to-a.svg" width="40" alt="">
-            </a>
-        </span>
-    </div>
     <div class="row">
         <?php while($a=$c->fetch()){?>
 

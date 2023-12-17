@@ -1,39 +1,39 @@
 <?php
-
-include 'authManager.php';
-
-$authManager = new AuthManager();
-$errorMessage = "";
-
+// Include necessary files and initialize the session
+include_once "connDB.php";
+//include 'includes/navigation.php';
 // Check if the user is already logged in, redirect to the home page
 if (isset($_SESSION['user_name'])) {
     header("Location: index.php?page=home");
     exit();
 }
-
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST["email"];
-    $password = $_POST["password"];
+    // In a real-world scenario, you would validate the user input more thoroughly
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
-    $result = $authManager->getUserFromDatabase($email, $password);
-    echo $result;
-
-    if (sizeof($result) > 0) {
-        $_SESSION['user_name'] = $result["UserName"];
-        $_SESSION['user_id'] = $result["CustomerID"];
+//    $sql = "select * from `customerlogon` where `UserName`=$username and Pass=$password";
+    $sql = "SELECT * FROM `customerlogon` WHERE `UserName` = '$username' AND `Pass` = '$password' Limit 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Validate the username and password (basic example, should be improved for production)
+    if ($result) {
+        // Authentication successful, set session variables
+        $_SESSION['user_name'] = $result[0]["UserName"]; // Set a user ID or other relevant information
+        $_SESSION['user_id'] = $result[0]["CustomerID"]; // Set a user ID or other relevant information
         header("Location: index.php?page=home");
         exit();
     } else {
-        $errorMessage = 'Invalid username or password.';
+        $error_message = 'Invalid username or password.';
     }
 }
 ?>
 <style>
-    .header {
+    .header{
         display: none;
     }
-
     .login {
         max-width: 400px;
         margin: 50px auto;
@@ -71,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     .login button:hover {
         background-color: #555;
     }
+
 </style>
 
 
@@ -78,31 +79,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="login">
         <h1>Login</h1>
 
-        <?php if (isset($errorMessage)): ?>
-            <p style="color: red;">
-                <?php echo $errorMessage; ?>
-            </p>
+        <?php if (isset($error_message)) : ?>
+            <p style="color: red;"><?php echo $error_message; ?></p>
         <?php endif; ?>
 
         <form method="post" action="?page=login">
-        <div class="form-group">
-            <label for="email">Email address</label>
-            <input type="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" class="form-control"
-                placeholder="Enter email" required>
-            <small class="form-text text-muted">We'll never share your email with anyone else.</small>
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" minlength="8" name="password" class="form-control" placeholder="Enter your password"
-                required>
-        </div>
-        <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input">
-            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-        </div>
-        <?php
-        ?>
-        <button type="submit" class="btn btn-primary">Login</button>
+            <label for="username">Username:</label>
+            <input type="text" name="username" autocomplete="luisg@embraer.com.br" required>
+
+            <label for="password">Password:</label>
+            <input type="password" name="password" required>
+
+            <button type="submit">Login</button>
         </form>
     </div>
 </div>
+
+<?php //include 'includes/scripts.php'; ?>
