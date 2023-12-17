@@ -8,29 +8,33 @@ function MostReview($conn)
     $sql = "SELECT * FROM reviews r, artworks aw,customers c
 						where aw.ArtWorkID=r.ArtWorkId
 						and c.CustomerID=r.CustomerID
-						ORDER BY r.ReviewDate ASC limit 3";
+						ORDER BY r.ReviewDate DESC limit 3";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     foreach ($result as $row){
         $s = $row['Rating'];
-        $stars = star($s);
+        if(strlen($row["ImageFileName"]) < 6){
+            $img = '/assets/images/works/small/0'.$row["ImageFileName"].'.jpg';
+        }
+        else {
+            $img = '/assets/images/works/small/'.$row["ImageFileName"].'.jpg';
+        }
         $html = '<div class="col-md-4">
             <div class="card">
                 <div class="card-image">
-                    <img src="/assets/images/works/small/0'.$row["ImageFileName"].'.jpg" class="card-img-top" alt="...">
-                      '.$stars.'
+                    <img src="'.$img.'" class="card-img-top" alt="...">
                 </div>
     
                 <div class="card-body">
                     <h5 class="card-title">' . $row['LastName'] . '
                      <small class="float-end">
-                        <img src="/assets/images/eye.svg" width="20" alt=""> ' .$s.'
+                        <img src="/assets/images/star.svg" width="20" alt=""> ' .$s.'
                     </small>
                     </h5>
                     <p id="card-text">' . substr($row['Comment'], 0, 100) . '</p>
-                    <a href="?workPage='.$row["ArtWorkID"].'" class="btn btn-dark">Show Details</a>
+                    <a href="?page=work&Id='.$row["ArtWorkID"].'" class="btn btn-dark">Show Details</a>
                 </div>
             </div>
         </div>';

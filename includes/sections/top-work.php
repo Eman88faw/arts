@@ -10,22 +10,27 @@ function TopWorks($conn)
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($result as $row){
+        $double_number = doubleval($row["AVG(Rating)"]);
+        $rate = intval($double_number);
+        $stars = '';
+        for ($i=0; $i < $rate; $i++){
+            $stars .= '<img src="/assets/images/star.svg" class="star-icon" alt="">';
+        }
+        if($double_number > $rate){
+            $stars.= '<img src="/assets/images/star-half.svg" class="star-icon" alt="">';
+        }
         $html = '<div class="col-md-4">
             <div class="card">
                 <div class="card-image">
                     <img src="/assets/images/works/small/0'.$row["ImageFileName"]. '.jpg" class="card-img-top" alt="...">
                     <small class="d-block stars">
-                        <img src="/assets/images/star.svg" class="star-icon" alt="">
-                        <img src="/assets/images/star.svg" class="star-icon" alt="">
-                        <img src="/assets/images/star.svg" class="star-icon" alt="">
-                        <img src="/assets/images/star.svg" class="star-icon" alt="">
-                        <img src="/assets/images/star-half.svg" class="star-icon" alt="">
+                        '.$stars.'
                     </small>
                 </div>
     
                 <div class="card-body">
                     <h5 class="card-title">' .$row["Title"].'</h5>
-                    <a href="?workPage='.$row["ArtWorkID"].'" class="btn btn-dark">Show Details</a>
+                    <a href="?page=work&Id='.$row["ArtWorkID"].'" class="btn btn-dark">Show Details</a>
                 </div>
             </div>
         </div>';
