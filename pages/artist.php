@@ -1,5 +1,35 @@
 <?php
-//include_once "config.php";
+function wishlist($conn){
+    if(isset($_SESSION["user_id"])){
+        $id = intval($_GET['Id']);
+        $r = check_in_wishlist($conn);
+        if(!$r){
+            $output = '<form action="?page=artist&Id='.$id.'" method="post">
+                        <input type="hidden" name="item_id" value="'.$id.'">
+                        <input type="hidden" name="item_type" value="artist">
+                        <button type="submit" class="addtowishlist btn btn-dark" >
+                            Add To Wishlist
+                            <img src="./assets/images/heart.svg" width="30" height="30" class="" alt="">
+                        </button>  
+                    </form>';
+        }
+        else{
+            $output = '<form action="?page=artist&Id='.$id.'" method="post">
+                        <input type="hidden" name="item_id" value="'.$id.'">
+                        <input type="hidden" name="item_type" value="artist">
+                        <input type="hidden" name="action" value="removeFromWishlist">
+                        <button type="submit" class="addtowishlist btn btn-dark" >
+                            Remove From Wishlist
+                            <img src="./assets/images/remove.svg" width="30" height="30" class="" alt="">
+                        </button>  
+                    </form>';
+        }
+    }
+    else{
+        $output = '';
+    }
+    return $output;
+}
 function artistData($conn){
     $id = intval($_GET['Id']);
     $sql = "SELECT * FROM `artists` WHERE ArtistID=$id";
@@ -23,6 +53,14 @@ function artistData($conn){
                     </div>
                 </div>';
     return $output;
+}
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = intval($_GET['Id']);
+    if (!empty($_POST['item_id']) && !empty($_POST['item_type'])) {
+        add_to_wishlist($conn);
+    }
 }
 
 
