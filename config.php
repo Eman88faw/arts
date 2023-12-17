@@ -3,11 +3,11 @@ session_start();
 define("BURL", "http://localhost/arts/");
 define("ASSETS", "http://localhost/arts/assets/");
 
-define("BL", __DIR__."/");
+define("BL", __DIR__ . "/");
 // Connect to Database
-include_once(BL."connDB.php");
+include_once(BL . "connDB.php");
 
-// Add to wishlist
+// wishlist
 function wishListItem($conn)
 {
     $result = "";
@@ -30,11 +30,21 @@ function wishListItem($conn)
             else{
                 $img = "./assets/images/works/medium/".$workItem[0]["ImageFileName"].".jpg";
             }
-            $result .= '<a href="/?page=work&Id='.$id.'" class="w-100 d-flex border-bottom mb-2">
-                            <img src="'.$img.'" alt="">
-                            <p>'.$workItem[0]["Title"].'<small class="d-block">'.$item["created_at"].'</small></p>
+            $result .= '<div class="w-100 d-flex border-bottom mb-2 justify-content-between align-items-center">
+                            <a href="/?page=work&Id='.$id.'" >
+                                <img src="'.$img.'" alt="">
+                                <p>'.$workItem[0]["Title"].'<small class="d-block">'.$item["created_at"].'</small></p>
                             
-                        </a>';
+                            </a>
+                            <form action="?page=work&Id='.$id.'" method="post">
+                                <input type="hidden" name="item_id" value="'.$id.'">
+                                <input type="hidden" name="item_type" value="work">
+                                <input type="hidden" name="action" value="removeFromWishlist">
+                                <button type="submit" class="addtowishlist btn btn-danger btn-sm" >
+                                    Remove
+                                </button>  
+                            </form>
+                        </div>';
         }
         else{
             $sql = "SELECT FirstName, LastName FROM `artists` WHERE `ArtistID`=$id";
@@ -43,11 +53,21 @@ function wishListItem($conn)
             $workItem = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $img = "./assets/images/artists/medium/".$id.".jpg";
 
-            $result .= '<a href="/?page=artist&Id='.$id.'" class="w-100 d-flex border-bottom mb-2">
-                            <img src="'.$img.'" alt="">
-                            <p>'.$workItem[0]["FirstName"].' '. $workItem[0]["LastName"] .' <small class="d-block">'.$item["created_at"].'</small></p>
-                          
-                        </a>';
+            $result .= '<div class="w-100 d-flex border-bottom mb-2 justify-content-between align-items-center">
+                            <a href="/?page=artist&Id='.$id.'" >
+                                <img src="'.$img.'" alt="">
+                                <p>'.$workItem[0]["FirstName"].' '. $workItem[0]["LastName"] .' <small class="d-block">'.$item["created_at"].'</small></p>
+                                
+                            </a>
+                            <form action="?page=work&Id='.$id.'" method="post">
+                                <input type="hidden" name="item_id" value="'.$id.'">
+                                <input type="hidden" name="item_type" value="artist">
+                                <input type="hidden" name="action" value="removeFromWishlist">
+                                <button type="submit" class="addtowishlist btn btn-danger btn-sm p-1 ml-2" >
+                                    Remove
+                                </button>  
+                            </form>
+                        </div>';
         }
     }
 

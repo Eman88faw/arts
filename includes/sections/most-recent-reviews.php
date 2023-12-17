@@ -16,10 +16,10 @@ function MostReview($conn)
     foreach ($result as $row){
         $s = $row['Rating'];
         if(strlen($row["ImageFileName"]) < 6){
-            $img = '/assets/images/works/small/0'.$row["ImageFileName"].'.jpg';
+            $img = './assets/images/works/medium/0'.$row["ImageFileName"].'.jpg';
         }
         else {
-            $img = '/assets/images/works/small/'.$row["ImageFileName"].'.jpg';
+            $img = './assets/images/works/medium/'.$row["ImageFileName"].'.jpg';
         }
         $html = '<div class="col-md-4">
             <div class="card">
@@ -30,7 +30,7 @@ function MostReview($conn)
                 <div class="card-body">
                     <h5 class="card-title">' . $row['LastName'] . '
                      <small class="float-end">
-                        <img src="/assets/images/star.svg" width="20" alt=""> ' .$s.'
+                        <img src="./assets/images/star.svg" width="20" alt=""> ' .$s.'
                     </small>
                     </h5>
                     <p id="card-text">' . substr($row['Comment'], 0, 100) . '</p>
