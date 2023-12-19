@@ -1,6 +1,7 @@
 <?php
-include 'db.php';
-include 'utils.php';
+include $_SERVER['DOCUMENT_ROOT'].'/arts/db.php';
+include $_SERVER['DOCUMENT_ROOT'].'/arts/utils/functions.php';
+
 class AuthManager
 {
     private $db;

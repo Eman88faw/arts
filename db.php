@@ -2,7 +2,8 @@
 
 // https://codeshack.io/super-fast-php-mysql-database-class/
 
-include 'dbconfig.php';
+include $_SERVER['DOCUMENT_ROOT'].'/arts/dbconfig.php';
+
 
 class db
 {
@@ -146,6 +147,8 @@ class db
             return 'i';
         return 'b';
     }
+
+    
 
 }
 ?>

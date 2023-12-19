@@ -54,8 +54,8 @@
                                 <span><?php echo $_SESSION['user_name'];?></span>
                             </a>
                             <ul>
-                                <li><a class="dropdown-item" href="?page=dashboard">My Account</a></li>
-                                <li><a class="dropdown-item" href="?page=dashboard">Manage Users</a></li>
+                                <li><a class="dropdown-item" href="?page=my_account">My Account</a></li>
+                                <li><a class="dropdown-item" href="?page=manage_users">Manage Users</a></li>
                                 <li class="divider"></li>
                                 <li><a class="dropdown-item" href="?page=logout">logout</a></li>
                             </ul>

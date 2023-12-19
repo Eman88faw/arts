@@ -1,84 +1,12 @@
 <?php
 
-include $_SERVER['DOCUMENT_ROOT'].'/arts/utils/authManager.php';
+echo $_SESSION['user_id']
 
-$authManager = new AuthManager();
-$errorMessage = "";
-
-// Check if the user is already logged in, redirect to the home page
-if (isset($_SESSION['user_name'])) {
-    header("Location: index.php?page=home");
-    exit();
-}
-
-// Check if the form is submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $firstName = $_POST["firstName"];
-    $lastName = $_POST["lastName"];
-    $address = $_POST["address"];
-    $city = $_POST["city"];
-    $region = $_POST["region"];
-    $country = $_POST["country"];
-    $postal = $_POST["postal"];
-    $phone = $_POST["phone"];
-    $email = $_POST["email"];
-    $password = $_POST["password"];
-
-    $result = $authManager->addUserToDatabase($email, $password, $firstName, $lastName, $address, $city, $region, $country, $postal, $phone);
-
-    if (sizeof($result) > 0) {
-        $_SESSION['user_name'] = $result["UserName"];
-        $_SESSION['user_id'] = $result["CustomerID"];
-        header("Location: index.php?page=home");
-        exit();
-    } else {
-        $errorMessage = 'Something went wrong.';
-    }
-}
 ?>
-<style>
-    .header {
-        display: none;
-    }
 
-    .register {
-        max-width: 400px;
-        margin: 50px auto;
-        background-color: white;
-        padding: 20px;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
 
-    .register form {
-        display: flex;
-        flex-direction: column;
-    }
 
-    .register label {
-        margin-bottom: 8px;
-    }
-
-    .register input {
-        padding: 10px;
-        margin-bottom: 16px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
-
-    .register button {
-        background-color: #333;
-        color: white;
-        padding: 10px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .register button:hover {
-        background-color: #555;
-    }
-</style>
+<div class="container py-5">
 <div class="register">
     <h1>Register</h1>
 
@@ -141,3 +69,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button type="submit" class="btn btn-primary">Regestrieren</button>
     </form>
 </div>
+</div>  
+
