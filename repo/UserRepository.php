@@ -149,3 +149,9 @@ class UserSortFields
     const USERNAME    = 86788;
 }
 
+class SortOrder
+{
+    const ASCENDING    = 86789;
+    const DESCENDING    = 86790;
+}
+

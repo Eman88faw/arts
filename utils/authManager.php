@@ -1,5 +1,5 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'].'/arts/db.php';
+include $_SERVER['DOCUMENT_ROOT'].'/arts/db/db.php';
 include $_SERVER['DOCUMENT_ROOT'].'/arts/utils/functions.php';
 
 class AuthManager

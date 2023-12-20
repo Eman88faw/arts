@@ -2,7 +2,7 @@
 
 include $_SERVER['DOCUMENT_ROOT'].'/arts/repo/UserRepository.php';
 include $_SERVER['DOCUMENT_ROOT'].'/arts/entities/User.php';
-include $_SERVER['DOCUMENT_ROOT'].'/arts/pdoDb.php';
+include $_SERVER['DOCUMENT_ROOT'].'/arts/db/pdoDb.php';
 
 $successMessage = "";
 $errorMessage = "";
@@ -36,14 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     echo $result;
 
-    // if (sizeof($result) > 0) {
-    //     $_SESSION['user_name'] = $result["UserName"];
-    //     $_SESSION['user_id'] = $result["CustomerID"];
-    //     header("Location: index.php?page=home");
-    //     exit();
-    // } else {
-    //     $errorMessage = 'Something went wrong.';
-    // }
+    if ($result) {
+        $successMessage = 'Your data has been changed.';
+    } else {
+        $errorMessage = 'Something went wrong.';
+    }
 }
 ?>
 
