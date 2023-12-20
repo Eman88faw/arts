@@ -1,9 +1,6 @@
 <?php
 
-// https://codeshack.io/super-fast-php-mysql-database-class/
-
 include $_SERVER['DOCUMENT_ROOT'].'/arts/dbconfig.php';
-
 
 class db
 {

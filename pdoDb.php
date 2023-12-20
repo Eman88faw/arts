@@ -2,7 +2,7 @@
 
 include $_SERVER['DOCUMENT_ROOT'].'/arts/dbconfig.php';
 
-class testDatabase {
+class pdoDb {
     private $host = DBHOST;
     private $db   = DBNAME;
     private $user = DBUSER;
@@ -14,6 +14,14 @@ class testDatabase {
     private $error;
 
     public function __construct() {
+        $this->estableConnection();
+    }
+
+    public function __destruct() {
+        $this->pdo = null;
+    }
+
+    public function estableConnection() {
         // DSN (Data Source Name) configuration
         $dsn = "mysql:host=$this->host;dbname=$this->db;port=$this->port;charset=$this->charset";
         $options = [
@@ -31,8 +39,12 @@ class testDatabase {
     }
 
     public function connect() {
+        if ($this->pdo === null) {
+            $this->estableConnection();
+        }
         return $this->pdo;
     }
+    
 
     public function prepareStatement($sql) {
         return $this->pdo->prepare($sql);
