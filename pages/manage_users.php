@@ -82,6 +82,7 @@ $orderBy = $sortOptions[$sortColumn];
                         <td><?php echo $user->getId(); ?></td>
                         <td><?php echo $user->getFirstName() . ' ' . $user->getLastName(); ?></td>
                         <td><?php echo $user->getUserName(); ?></td>
+                        <td><a href="index.php?page=edit_user&id=<?php echo $user->getId(); ?>">Edit</a></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
