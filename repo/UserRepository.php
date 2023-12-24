@@ -201,7 +201,6 @@ class UserRepository
         }
 
         $result = false;
-        $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
         try {
             $this->database->connect();
@@ -213,17 +212,24 @@ class UserRepository
             $statement = $this->database->prepareStatement($sql);
             $statement->bindValue(':id', $id);
             $statement->bindValue(':username', $user->getUsername());
-            $statement->bindValue(':pass', $password_hash);
+            $statement->bindValue(':pass', $password);
             $statement->bindValue(':state', $user->getState());
             $result = $statement->execute();
 
             if($result) {
                 // 2nd step: update table "customers"
-                $sql = "UPDATE customers SET firstname = :firstname, lastname = :lastname WHERE CustomerID = :id";
+                $sql = "UPDATE customers SET firstname = :firstname, lastname = :lastname, Address = :address, City = :city, Region = :region, Country = :country, Postal = :postal, Phone = :phone, Email = :email WHERE CustomerID = :id";
                 $statement = $this->database->prepareStatement($sql);
                 $statement->bindValue(':id', $id);
                 $statement->bindValue(':firstname', $user->getFirstName());
                 $statement->bindValue(':lastname', $user->getLastName());
+                $statement->bindValue(':address', $user->getAddress());
+                $statement->bindValue(':city', $user->getCity());
+                $statement->bindValue(':region', $user->getRegion());
+                $statement->bindValue(':country', $user->getCountry());
+                $statement->bindValue(':postal', $user->getPostal());
+                $statement->bindValue(':phone', $user->getPhone());
+                $statement->bindValue(':email', $user->getEmail());
                 $result = $statement->execute();
 
                 $this->database->commit();
