@@ -13,8 +13,6 @@ class AuthManager
 
     public function getUserFromDatabase($email, $password)
     {
-        echo $email;
-        echo $password;
         $account = $this->db->query('SELECT * FROM customerlogon WHERE UserName = ? AND Pass = ?', $email, $password)->fetchArray();
         
         $this->closeDatabase();

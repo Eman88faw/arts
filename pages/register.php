@@ -26,13 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $result = $authManager->addUserToDatabase($email, $password, $firstName, $lastName, $address, $city, $region, $country, $postal, $phone);
 
-    if (sizeof($result) > 0) {
+    if ($result) {
         $_SESSION['user_name'] = $result["UserName"];
         $_SESSION['user_id'] = $result["CustomerID"];
+        $_SESSION['state'] = $result["State"];
         header("Location: index.php?page=home");
         exit();
     } else {
-        $errorMessage = 'Something went wrong.';
+        $errorMessage = 'User already exists.';
     }
 }
 ?>
@@ -78,6 +79,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     .register button:hover {
         background-color: #555;
     }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-top: 6px;
+        margin-bottom: 16px;
+    }
+
+    input[type=submit] {
+        background-color: #04AA6D;
+        color: white;
+    }
+
+    #message {
+        display: none;
+        background: #f1f1f1;
+        color: #000;
+        position: relative;
+        padding: 20px;
+        margin-top: 10px;
+    }
+
+    #message p {
+        padding: 10px 35px;
+        font-size: 18px;
+    }
+
+    .valid {
+        color: green;
+    }
+
+    .valid:before {
+        position: relative;
+        left: -35px;
+        content: "&#10004;";
+    }
+
+    .invalid {
+        color: red;
+    }
+
+    .invalid:before {
+        position: relative;
+        left: -35px;
+        content: "&#10006;";
+    }
 </style>
 <div class="register">
     <h1>Register</h1>
@@ -97,8 +147,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" minlength="8" name="password" class="form-control" placeholder="Enter your password"
+            <div id="password-message" style="color: red;"></div>
+            <input type="password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
                 required>
+        </div>
+        <div id="message">
+            <h3>Password must contain the following:</h3>
+            <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+            <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+            <p id="number" class="invalid">A <b>number</b></p>
+            <p id="length" class="invalid">Minimum <b>8 characters</b></p>
         </div>
         <div class="form-group">
             <label for="firstName">First Name</label>
@@ -126,13 +185,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="form-group">
             <label for="postal">Postal Code</label>
-            <input type="text" name="postal" pattern="[0-9]{5}" class="form-control"
+            <input type="number" name="postal" pattern="[0-9]{5}" class="form-control"
                 placeholder="Enter your postal code" required>
         </div>
         <div class="form-group">
             <label for="phone">Phone Number</label>
-            <input type="text" name="phone" pattern="^\+\d+$" class="form-control" placeholder="Enter your phone number"
-                required>
+            <input type="number" name="phone" pattern="^\+\d+$" class="form-control"
+                placeholder="Enter your phone number" required>
         </div>
         <div class="form-group form-check">
             <input type="checkbox" class="form-check-input">
@@ -141,3 +200,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button type="submit" class="btn btn-primary">Regestrieren</button>
     </form>
 </div>
+
+<script>
+    var myInput = document.getElementById("password");
+    var letter = document.getElementById("letter");
+    var capital = document.getElementById("capital");
+    var number = document.getElementById("number");
+    var length = document.getElementById("length");
+
+    // When the user clicks on the password field, show the message box
+    myInput.onfocus = function () {
+        document.getElementById("message").style.display = "block";
+    }
+
+    // When the user clicks outside of the password field, hide the message box
+    myInput.onblur = function () {
+        document.getElementById("message").style.display = "none";
+    }
+
+    // When the user starts to type something inside the password field
+    myInput.onkeyup = function () {
+        // Validate lowercase letters
+        var lowerCaseLetters = /[a-z]/g;
+        if (myInput.value.match(lowerCaseLetters)) {
+            letter.classList.remove("invalid");
+            letter.classList.add("valid");
+        } else {
+            letter.classList.remove("valid");
+            letter.classList.add("invalid");
+        }
+
+        // Validate capital letters
+        var upperCaseLetters = /[A-Z]/g;
+        if (myInput.value.match(upperCaseLetters)) {
+            capital.classList.remove("invalid");
+            capital.classList.add("valid");
+        } else {
+            capital.classList.remove("valid");
+            capital.classList.add("invalid");
+        }
+
+        // Validate numbers
+        var numbers = /[0-9]/g;
+        if (myInput.value.match(numbers)) {
+            number.classList.remove("invalid");
+            number.classList.add("valid");
+        } else {
+            number.classList.remove("valid");
+            number.classList.add("invalid");
+        }
+
+        // Validate length
+        if (myInput.value.length >= 8) {
+            length.classList.remove("invalid");
+            length.classList.add("valid");
+        } else {
+            length.classList.remove("valid");
+            length.classList.add("invalid");
+        }
+    }
+</script>

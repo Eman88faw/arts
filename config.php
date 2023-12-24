@@ -1,5 +1,8 @@
 <?php
-session_start();
+// Start the session if it's not already started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 define("BURL", "http://localhost/arts/");
 define("ASSETS", "http://localhost/arts/assets/");
 

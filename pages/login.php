@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (sizeof($result) > 0) {
         $_SESSION['user_name'] = $result["UserName"];
         $_SESSION['user_id'] = $result["CustomerID"];
+        $_SESSION['state'] = $result["State"];
         header("Location: index.php?page=home");
         exit();
     } else {

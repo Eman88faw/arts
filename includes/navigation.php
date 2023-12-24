@@ -1,4 +1,13 @@
-<?php include_once "config.php"?>
+<?php
+
+include_once "config.php";
+
+if (isset($_SESSION['state'])) {
+    $state = $_SESSION['state'];
+    $isAdmin = $state == 666;
+}
+
+?>
 
 <header class="header fixed-top">
     <div class="container">
@@ -55,9 +64,11 @@
                             </a>
                             <ul>
                                 <li><a class="dropdown-item" href="?page=my_account">My Account</a></li>
-                                <li><a class="dropdown-item" href="?page=manage_users">Manage Users</a></li>
+                                <?php if ($isAdmin): ?>
+                                    <li><a class="dropdown-item" href="?page=manage_users">Manage Users</a></li>
+                                <?php endif; ?>
                                 <li class="divider"></li>
-                                <li><a class="dropdown-item" href="?page=logout">logout</a></li>
+                                <li><a class="dropdown-item" href="?page=logout">Logout</a></li>
                             </ul>
                         </li>
 
