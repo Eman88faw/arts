@@ -126,7 +126,7 @@ class UserRepository
 
             if($result) {
                 // 2nd step: update table "customers"
-                $sql = "UPDATE customers SET firstname = :firstname, lastname = :lastname WHERE CustomerID = :id";
+                $sql = "UPDATE customers SET firstname = :firstname, lastname = :lastname, Address = :address, City = :city, Region = :region, Country = :country, Postal = :postal, Phone = :phone, Email = :email WHERE CustomerID = :id";
                 $statement = $this->database->prepareStatement($sql);
                 $statement->bindValue(':id', $id);
                 $statement->bindValue(':firstname', $user->getFirstName());
@@ -150,6 +150,43 @@ class UserRepository
         }
 
         Logging::Log("User with ID '$id' updated.");
+
+        return $result;
+    }
+
+    public function deleteUser(int $id) : bool
+    {
+        $result = false;
+        // check for invalid users
+        if($id < 1) {
+            return false;
+        }
+
+        try {
+            $this->database->connect();
+
+            $this->database->beginTransaction();
+            
+            $sql = "UPDATE customerlogon SET State = :state, DateLastModified = now() WHERE CustomerID = :id";
+            $statement = $this->database->prepareStatement($sql);
+            $statement->bindValue(':id', $id);
+            $statement->bindValue(':state', 0);
+            $result = $statement->execute();
+
+            if ($result) {
+                $this->database->commit();
+                Logging::Log("User with ID '$id' deleted.");
+            } else {
+                $this->database->rollback();
+            }
+        } catch (Exception $ex) {
+            $this->database->rollback();
+            exit("'Could not delete user with ID '$id' : " . $ex->getMessage());
+        } finally {
+            $this->database->close();
+        }
+
+        Logging::Log("User with ID '$id' deleted.");
 
         return $result;
     }

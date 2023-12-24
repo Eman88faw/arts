@@ -90,7 +90,7 @@ $users = $userRepo->getUsersSorted($orderBy, $sortOrder);
                     <th>Actions</th>
                     <th>First Name</th>
                     <th>Last Name</th>
-                    <th>Email</th>
+                    <th>Username</th>
                     <th>Address</th>
                     <th>City</th>
                     <th>Region</th>
@@ -103,6 +103,7 @@ $users = $userRepo->getUsersSorted($orderBy, $sortOrder);
             </thead>
             <tbody>
                 <?php foreach ($users as $user): ?>
+                    <?php if ($user->getState() != 0): ?>
                     <tr>
                         <td>
                             <?php echo $user->getId(); ?>
@@ -142,6 +143,7 @@ $users = $userRepo->getUsersSorted($orderBy, $sortOrder);
                             <?php echo $user->getState(); ?>
                         </td>
                     </tr>
+                    <?php endif; ?>
                 <?php endforeach; ?>
             </tbody>
         </table>

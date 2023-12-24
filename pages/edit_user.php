@@ -48,7 +48,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     } elseif (isset($_POST['delete'])) {
 
-        echo "Delete";
+        $result = $userRepo->deleteUser($currentUserId);
+
+        if ($result) {
+            header("Location: index.php?page=manage_users");
+        } else {
+            $errorMessage = 'Something went wrong.';
+        }
     }
 
 }
