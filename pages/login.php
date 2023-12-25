@@ -13,16 +13,16 @@ if (isset($_SESSION['user_name'])) {
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST["email"];
+    // Sanitize email
+    $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
     $password = $_POST["password"];
 
     $result = $authManager->getUserFromDatabase($email, $password);
-    echo $result;
 
-    if (sizeof($result) > 0) {
-        $_SESSION['user_name'] = $result["UserName"];
-        $_SESSION['user_id'] = $result["CustomerID"];
-        $_SESSION['state'] = $result["State"];
+    if ($result) {
+        $_SESSION['user_name'] = htmlspecialchars($result["UserName"]);
+        $_SESSION['user_id'] = htmlspecialchars($result["CustomerID"]);
+        $_SESSION['state'] = htmlspecialchars($result["State"]);
         header("Location: index.php?page=home");
         exit();
     } else {

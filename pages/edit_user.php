@@ -7,7 +7,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/arts/db/pdoDb.php';
 $successMessage = "";
 $errorMessage = "";
 
-// Create a database connection (assuming you have a Database class)
+// Create a database connection
 $db = new pdoDb();
 
 // Initialize UserRepository with the database connection
@@ -25,39 +25,40 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['update'])) {
-        $username = $_POST["username"];
-        $firstName = $_POST["firstName"];
-        $lastName = $_POST["lastName"];
-        $address = $_POST["address"];
-        $city = $_POST["city"];
-        $region = $_POST["region"];
-        $country = $_POST["country"];
-        $postal = $_POST["postal"];
-        $phone = $_POST["phone"];
-        $email = $_POST["email"];
+        // Sanitize inputs
+        $username = filter_input(INPUT_POST, "username", FILTER_SANITIZE_STRING);
+        $firstName = filter_input(INPUT_POST, "firstName", FILTER_SANITIZE_STRING);
+        $lastName = filter_input(INPUT_POST, "lastName", FILTER_SANITIZE_STRING);
+        $address = filter_input(INPUT_POST, "address", FILTER_SANITIZE_STRING);
+        $city = filter_input(INPUT_POST, "city", FILTER_SANITIZE_STRING);
+        $region = filter_input(INPUT_POST, "region", FILTER_SANITIZE_STRING);
+        $country = filter_input(INPUT_POST, "country", FILTER_SANITIZE_STRING);
+        $postal = filter_input(INPUT_POST, "postal", FILTER_VALIDATE_INT);
+        $phone = filter_input(INPUT_POST, "phone", FILTER_SANITIZE_STRING);
+        $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
 
-        $isAdmin = isset($_POST["isAdmin"]) ? 666 : 1;
+            $isAdmin = isset($_POST["isAdmin"]) ? 666 : 1;
 
-        $user = new User($currentUserId, $username, $firstName, $lastName, $address, $city, $region, $country, $postal, $phone, $email, $isAdmin);
-        $result = $userRepo->updateUserByAdmin($user);
-
-        if ($result) {
-            header("Location: index.php?page=manage_users");
-        } else {
-            $errorMessage = 'Something went wrong.';
+            $user = new User($currentUserId, $username, $firstName, $lastName, $address, $city, $region, $country, $postal, $phone, $email, $isAdmin);
+            $result = $userRepo->updateUserByAdmin($user);
+    
+            if ($result) {
+                header("Location: index.php?page=manage_users");
+            } else {
+                $errorMessage = 'Something went wrong.';
+            }
+        } elseif (isset($_POST['delete'])) {
+    
+            $result = $userRepo->deleteUser($currentUserId);
+    
+            if ($result) {
+                header("Location: index.php?page=manage_users");
+            } else {
+                $errorMessage = 'Something went wrong.';
+            }
         }
-    } elseif (isset($_POST['delete'])) {
-
-        $result = $userRepo->deleteUser($currentUserId);
-
-        if ($result) {
-            header("Location: index.php?page=manage_users");
-        } else {
-            $errorMessage = 'Something went wrong.';
-        }
+    
     }
-
-}
 ?>
 
 <div class="container py-5">

@@ -13,23 +13,23 @@ if (isset($_SESSION['user_name'])) {
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $firstName = $_POST["firstName"];
-    $lastName = $_POST["lastName"];
-    $address = $_POST["address"];
-    $city = $_POST["city"];
-    $region = $_POST["region"];
-    $country = $_POST["country"];
-    $postal = $_POST["postal"];
-    $phone = $_POST["phone"];
-    $email = $_POST["email"];
-    $password = $_POST["password"];
+    $firstName = filter_input(INPUT_POST, "firstName", FILTER_SANITIZE_STRING);
+    $lastName = filter_input(INPUT_POST, "lastName", FILTER_SANITIZE_STRING);
+    $address = filter_input(INPUT_POST, "address", FILTER_SANITIZE_STRING);
+    $city = filter_input(INPUT_POST, "city", FILTER_SANITIZE_STRING);
+    $region = filter_input(INPUT_POST, "region", FILTER_SANITIZE_STRING);
+    $country = filter_input(INPUT_POST, "country", FILTER_SANITIZE_STRING);
+    $postal = filter_input(INPUT_POST, "postal", FILTER_SANITIZE_STRING);
+    $phone = filter_input(INPUT_POST, "phone", FILTER_SANITIZE_STRING);
+    $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
+    $password = $_POST["password"]; // Consider using password hashing
 
     $result = $authManager->addUserToDatabase($email, $password, $firstName, $lastName, $address, $city, $region, $country, $postal, $phone);
 
     if ($result) {
-        $_SESSION['user_name'] = $result["UserName"];
-        $_SESSION['user_id'] = $result["CustomerID"];
-        $_SESSION['state'] = $result["State"];
+        $_SESSION['user_name'] = htmlspecialchars($result["UserName"]);
+        $_SESSION['user_id'] = htmlspecialchars($result["CustomerID"]);
+        $_SESSION['state'] = htmlspecialchars($result["State"]);
         header("Location: index.php?page=home");
         exit();
     } else {
