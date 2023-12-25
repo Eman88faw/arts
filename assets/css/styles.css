@@ -358,7 +358,7 @@ th {
     margin: auto auto;
     display: block;
 }
-ul.auth-nav li ul{
+.auth-nav li ul{
     display: none;
     position: absolute;
     background: #fff;
@@ -370,7 +370,7 @@ ul.auth-nav li ul{
     max-height: 250px;
     overflow-y: auto;
 }
-ul.auth-nav li:hover ul{
+.auth-nav li:hover ul{
     display: block;
 }
 

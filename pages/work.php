@@ -8,55 +8,96 @@ function workData($conn){
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $ima = "./assets/images/works/large/".$result[0]['ImageFileName'].".jpg";
-    $img = "./assets/images/works/large/0" . $result[0]['ImageFileName'] . ".jpg";
-    if(!file_exists($img)){
-        $img = "./assets/images/works/large/" . $result[0]['ImageFileName'] . ".jpg";
+    if(strlen($result[0]['ImageFileName']) < 6){
+        $img = "0".$result[0]['ImageFileName'].".jpg";
+    }else{
+        $img = $result[0]['ImageFileName'] . ".jpg";
     }
 //    $img = Check($ima);
-
+    $imageLarge = "./assets/images/works/large/".$img;
     return $output = '<div class="container mb-4">
                     <div class="row">
                         <div class="col-12">
                             <div class="text-center bg-info p-2 mb-3">
-                                <img src="'.$img.'" title="'.$result[0]["Title"] .'" alt="'.$result[0]["Title"] .'" style="max-width: 100%">
+                                <img onclick=\'displayLarge("'.$imageLarge.'")\' src="./assets/images/works/medium/'.$img.'" class="imgWork" title="'.$result[0]["Title"] .'" alt="'.$result[0]["Title"] .'">
                             </div>
                         </div>
                         <div class="col-12">
-                            <h3><b>Title</b> :  '.$result[0]["Title"] .'</h3>
-                            <p><b>Description</b> :  '.$result[0]["Description"].'</p>
-                            <p><b>GoogleLink</b> :  '.$result[0]["GoogleLink"].'</p>
-                            
-                                
-                                '. wishlist($conn).'
-                                
-                          
-                            
+                            <h3><b>Title</b>       :  '.$result[0]["Title"] .'</h3>
+                            <p><b>Description</b>  :  '.$result[0]["Description"].'</p>
+                            '. wishlist($conn).'
+                        </div>
+                        <div class="col-12 my-3">
+                            <table class="table table-striped table-bordered">
+                                <tr>
+                                    <th>Excerpt</th>
+                                    <td>'.$result[0]["Excerpt"].'</td>
+                                </tr>
+                                 <tr>
+                                    <th>ArtWorkType</th>
+                                    <td>'.$result[0]["ArtWorkType"].'</td>
+                                </tr>
+                                 <tr>
+                                    <th>YearOfWork</th>
+                                    <td>'.$result[0]["YearOfWork"].'</td>
+                                </tr>
+                                 <tr>
+                                    <th>Diamention</th>
+                                    <td>'.$result[0]["Width"].'*'.$result[0]["Height"].'</td>
+                                </tr>
+                                 <tr>
+                                    <th>Medium</th>
+                                    <td>'.$result[0]["Medium"].'</td>
+                                </tr>
+                                 <tr>
+                                    <th>OriginalHome</th>
+                                    <td>'.$result[0]["OriginalHome"].'</td>
+                                </tr>
+                                 <tr>
+                                    <th>GalleryID</th>
+                                    <td>'.$result[0]["GalleryID"].'</td>
+                                </tr>
+                                 <tr>
+                                    <th>ArtWorkLink</th>
+                                    <td>'.$result[0]["ArtWorkLink"].'</td>
+                                </tr>
+                                 <tr>
+                                    <th>GoogleLink</th>
+                                    <td>'.$result[0]["GoogleLink"].'</td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>';
 }
 function wishlist($conn){
-    $id = intval($_GET['Id']);
-    $r = check_in_wishlist($conn);
-    if(!$r){
-        $output = '<form action="?page=work&Id='.$id.'" method="post">
-                        <input type="hidden" name="work_id" value="'.$id.'">
+    if(isset($_SESSION["user_id"])){
+        $id = intval($_GET['Id']);
+        $r = check_in_wishlist($conn);
+        if(!$r){
+            $output = '<form action="?page=work&Id='.$id.'" method="post">
+                        <input type="hidden" name="item_id" value="'.$id.'">
+                        <input type="hidden" name="item_type" value="work">
                         <button type="submit" class="addtowishlist btn btn-dark" >
                             Add To Wishlist
                             <img src="./assets/images/heart.svg" width="30" height="30" class="" alt="">
                         </button>  
                     </form>';
-    }
-    else{
-        $output = '<form action="?page=work&Id='.$id.'" method="post">
-                        <input type="hidden" name="work_id" value="'.$id.'">
+        }
+        else{
+            $output = '<form action="?page=work&Id='.$id.'" method="post">
+                        <input type="hidden" name="item_id" value="'.$id.'">
+                        <input type="hidden" name="item_type" value="work">
                         <input type="hidden" name="action" value="removeFromWishlist">
                         <button type="submit" class="addtowishlist btn btn-dark" >
                             Remove From Wishlist
-                            <img src="./assets/images/remove.svg" width="30" height="30" class="" alt="">
+                            <img src="./assets/images/remove.svg" width="20" height="30" class="" alt="">
                         </button>  
                     </form>';
+        }
+    }
+    else{
+        $output = '';
     }
     return $output;
 }
@@ -68,11 +109,12 @@ function artistsWorks ($conn){
     $stmt->execute();
     $IID = $stmt->fetchAll(PDO::FETCH_COLUMN);
     $aid = $IID[0];
-    $sqlArtist = "SELECT `FirstName`, `LastName` FROM artists WHERE ArtistID=$aid Limit 1";
+    $sqlArtist = "SELECT `FirstName`, `LastName`,`ArtistID` FROM artists WHERE ArtistID=$aid Limit 1";
 //    var_dump($sqlArtist);
     $stmt2 = $conn->prepare($sqlArtist);
     $stmt2->execute();
     $result2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+    
     // Others Works To the Artist
     $sq = "SELECT `ImageFileName`, `ArtWorkID`,`Title` From artworks WHERE `ArtistID` =$aid";
     $stmtworks = $conn->prepare($sq);
@@ -85,12 +127,12 @@ function artistsWorks ($conn){
         if(!file_exists($img)){
             $img = "./assets/images/works/medium/" . $row['ImageFileName'] . ".jpg";
         }
-//        $imgr = Check($imas);
-        $htmlWorks .= '<div class="col-md-4">
+        $htmlWorks .= '<div class="col-md-3">
                             <div class="card mb-3">
                                 <div class="card-body p-0">
+                                
                                     <a class="w-100" href="/?page=work&Id=' . $row['ArtWorkID'] . '" title="'.$row['Title'].'" alt="'.$row['Title'].'">
-                                        <img class="d-block w-100" src="' . $img . '" alt="' . $row['Title'] . '" style="max-width: 100%">
+                                        <img class="d-block w-100" src="' . $img . '" alt="' . $row['Title'] . '" style="max-width: 100%; height: 250px">
                                     </a>
                                     <h5 class="text-center py-2">'.$row["Title"].'</h5>
                                 </div>
@@ -101,7 +143,9 @@ function artistsWorks ($conn){
     // output HTML
     $output = '<div class="container mb-4">
                     <div class="section-title">
-                        <h3>'.$result2[0]["FirstName"] .' '.$result2[0]["LastName"].' Works</h3>
+                                    
+                        <h3>'.$result2[0]["FirstName"] .' '.$result2[0]["LastName"].' Works </h3>
+                        <a class="float-end btn btn-sm btn-info position-relative" href="/?page=artist&Id='.$result2[0]["ArtistID"].'">'.$result2[0]["FirstName"] .' '. $result2[0]['LastName'].' Page</a>
                     </div>
                     <div class="row">
                         '.$htmlWorks.'
@@ -114,23 +158,26 @@ function artistsWorks ($conn){
 
 function reviews($conn){
     // reviews
-    $id = intval($_GET['Id']);
-    $reviewsSQL = "SELECT * FROM reviews WHERE ArtWorkId=$id";
+    if(isset($_SESSION["user_id"])){
+        $id = intval($_GET['Id']);
+        $reviewsSQL = "SELECT * FROM reviews WHERE ArtWorkId=$id";
 //    var_dump($reviewsSQL);
-    $stmtreviews = $conn->prepare($reviewsSQL);
-    $stmtreviews->execute();
-    $reviews = $stmtreviews->fetchAll(PDO::FETCH_ASSOC);
+        $stmtreviews = $conn->prepare($reviewsSQL);
+        $stmtreviews->execute();
+        $reviews = $stmtreviews->fetchAll(PDO::FETCH_ASSOC);
 //    var_dump($reviews);
-    $output = '';
-    foreach ($reviews as $review){
-        $settings = '';
-        if($_SESSION['user_id'] == $review["CustomerId"]){
-            $settings = '<div class="setting">
-                            <a href="?page=work&Id='.$_GET['Id'].'&delete-review='.$review["ReviewId"].'">Delete</a>
-                            <a href="update=">Edit</a>
+        $output = '';
+        foreach ($reviews as $review){
+            $settings = '';
+            if($_SESSION['user_id'] == $review["CustomerId"]){
+                $settings = '<div class="setting">
+                            <a class="btn btn-sm btn-danger" href="?page=work&Id='.$_GET['Id'].'&delete-review='.$review["ReviewId"].'">
+                                <img src="./assets/images/remove.svg" width="15" alt="">
+                                Delete
+                            </a>
                         </div>';
-        }
-        $output .= '<div class="rev-cont bg-light p-2 mb-2 d-flex">
+            }
+            $output .= '<div class="rev-cont bg-light p-2 mb-2 d-flex">
                         <div class="review-text">
                             <h5>Date : '.$review["ReviewDate"].'</h5>
                             <span>Rating : '.$review["Rating"].'</span>
@@ -138,7 +185,12 @@ function reviews($conn){
                             '.$settings.'
                         </div>
                     </div>';
+        }
     }
+    else{
+        $output = '<div class="w-100 bg-light p-3 text-center"><h4>you have no permission to show reviews. Please login to get this feature </h4><a class="d-inline-block mt-2 btn btn-primary btn-sm" href="?page=login">Login</a></div>';
+    }
+
     return $output;
 }
 
@@ -148,7 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_POST['comment'])) {
         addReview($conn);
     }
-    if (!empty($_POST['work_id'])) {
+    if (!empty($_POST['item_id']) && !empty($_POST['item_type'])) {
         add_to_wishlist($conn);
     }
 }
@@ -225,6 +277,7 @@ if(isset($_GET["delete-review"])){
         </div>
     </div>
 </div>
+<?php if(isset($_SESSION["user_id"])): ?>
 <div class="bg-light py-3 my-5">
     <div class="container">
         <div class="row my-5">
@@ -232,8 +285,8 @@ if(isset($_GET["delete-review"])){
             <form action="?page=work&Id=<?= $_GET['Id']?>" method="post">
                 <input type="hidden" name="ArtWorkId" value="<?=$_GET['Id']?>">
                 <div class="form-group col-4">
-                    <label for="">Rating</label>
-                    <select name="rating" class="form-control" id="">
+                    <label for=""  >Rating</label>
+                    <select name="rating"  class="form-control" id="">
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -253,4 +306,11 @@ if(isset($_GET["delete-review"])){
         </div>
     </div>
 </div>
+<?php endif;?>
 <?= artistsWorks ($conn);?>
+
+
+<div id="imgLargeView" class="imgLargeView">
+    <span id="closeModal" onclick="closeModal();">X</span>
+    <img src="" id="imageLarge" alt="">
+</div>

@@ -38,8 +38,14 @@ $co->execute();
     <div class="row">
 
                 <?php while($b=$co->fetch()){
+                if(strlen($b['ImageFileName']) < 6){
+                    $img="./assets/images/works/square-medium/0".$b['ImageFileName'].".jpg";
 
-                $img="./assets/images/works/large/".$b['ImageFileName'].".jpg";
+                }
+                else{
+                    $img="./assets/images/works/square-medium/".$b['ImageFileName'].".jpg";
+
+                }
                 $myimg=Check($img);
                 ?>
             <div class="col-md-3">

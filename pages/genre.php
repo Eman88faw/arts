@@ -22,9 +22,9 @@ $co->execute();
                <div class="col-md-4">
                    <?php
                    $temp = "./assets/images/genres/square-medium/" . $a['GenreID'] . ".jpg";
-                   $r = Check($temp);
+                   $r = $temp;
                    ?>
-                   <img id="myImg" class="card-image" src="<?= $r; ?>" style="">
+                   <img id="myImg" class="card-image" src="<?= $r; ?>" alt="<?=$a['GenreName'];?>" style="">
 
 
                </div>
@@ -44,16 +44,22 @@ $co->execute();
 </div>
 <div class="container">
     <div class="row">
-        <?php while ($b = $co->fetch()) {
-            $img = "./assets/images/works/large/0" . $b['ImageFileName'] . ".jpg";
-            $myimg = Check($img);
+        <?php while ($b = $co->fetch()):
+            if(strlen($b['ImageFileName']) < 6){
+                $img = "./assets/images/works/medium/0" . $b['ImageFileName'] . ".jpg";
+            }
+            else{
+                $img = "./assets/images/works/medium/" . $b['ImageFileName'] . ".jpg";
+            }
+
+            $myimg = $img;
             ?>
 
             <div class="col-md-4">
                 <div class="card mb-3">
                     <div class="card-body">
-                        <a href="/arts/?page=work&Id=<?= $b['ArtWorkID'] ?>">
-                            <img id="myImg" src="<?= $myimg; ?>" alt="<? $b['title'] ?>" style="height: 250px; width: auto;max-width:100%; margin: 0 auto;display: block">
+                        <a href="/?page=work&Id=<?= $b['ArtWorkID'] ?>">
+                            <img id="myImg" src="<?= $myimg; ?>" alt="<?= $b['title'] ?>" style="height: 250px; width: auto;max-width:100%; margin: 0 auto;display: block">
                         </a>
                     </div>
                 </div>
@@ -61,7 +67,7 @@ $co->execute();
             <!-- The Modal -->
 
 
-        <?php } ?>
+        <?php endwhile; ?>
     </div>
 </div>
 

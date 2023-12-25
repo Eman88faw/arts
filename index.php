@@ -50,7 +50,7 @@ function Check($s){
     <?php include BL.'includes/footer.php'; ?>
 
     <script>
-/*
+
         function displayLarge(url){
             document.getElementById('imageLarge').src = url
             document.getElementById('imgLargeView').setAttribute("style", "display:block");
@@ -58,6 +58,6 @@ function Check($s){
         function closeModal(){
             document.getElementById('imageLarge').src = ""
             document.getElementById('imgLargeView').setAttribute("style", "display:none");
-        }*/
+        }
     </script>
 </body>
