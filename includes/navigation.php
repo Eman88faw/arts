@@ -18,15 +18,15 @@ if (isset($_SESSION['state'])) {
             <div class="col-6">
                 <div class="menu ">
                     <ul class="align-items-center p-0 m-0">
-                        <li><a class="nav-link <?php if($_GET['page'] == "home" || !$_GET['page']){echo 'active';}?>" href="?page=home" >Home</a></li>
-                        <li><a class="nav-link <?php if($_GET['page'] == "about"){echo 'active';}?>" href="?page=about" >About Us</a></li>
+                        <li><a class="nav-link <?php if(isset($_GET['page']) && $_GET['page'] == "home" || isset($_GET['page']) && !$_GET['page']){echo 'active';}?>" href="?page=home" >Home</a></li>
+                        <li><a class="nav-link <?php if(isset($_GET['page']) && $_GET['page'] == "about"){echo 'active';}?>" href="?page=about" >About Us</a></li>
                         <li>
-                            <a class="nav-link <?php if($_GET['page'] == "browse_artists" || $_GET['page'] == "browse_artworks" || $_GET['page'] == "browse_genres" || $_GET['page'] == "browse_subjects" || $_GET['page'] == "artist" || $_GET['page'] == "work"){echo 'active';}?>" href="?page=about" >Browse</a>
+                            <a class="nav-link <?php if(isset($_GET['page']) && $_GET['page'] == "browse_artists" || isset($_GET['page']) && $_GET['page'] == "browse_artworks" || isset($_GET['page']) && $_GET['page'] == "browse_genres" || isset($_GET['page']) && $_GET['page'] == "browse_subjects" || isset($_GET['page']) && $_GET['page'] == "artist" || isset($_GET['page']) && $_GET['page'] == "work"){echo 'active';}?>" href="?page=about" >Browse</a>
                             <ul>
-                                <li><a class="nav-link <?php if($_GET['page'] == "browse_artists" || $_GET['page'] == "artist"){echo 'active';}?>" href="?page=browse_artists">Browse Artists</a></li>
-                                <li><a class="nav-link <?php if($_GET['page'] == "browse_artworks" || $_GET['page'] == "work"){echo 'active';}?>" href="?page=browse_artworks">Browse Artworks</a></li>
-                                <li><a class="nav-link <?php if($_GET['page'] == "browse_genres"){echo 'active';}?>" href="?page=browse_genres">Browse Genres</a></li>
-                                <li><a class="nav-link <?php if($_GET['page'] == "browse_subjects"){echo 'active';}?>" href="?page=browse_subjects">Browse Subjects</a></li>
+                                <li><a class="nav-link <?php if(isset($_GET['page']) && $_GET['page'] == "browse_artists" || isset($_GET['page']) && $_GET['page'] == "artist"){echo 'active';}?>" href="?page=browse_artists">Browse Artists</a></li>
+                                <li><a class="nav-link <?php if(isset($_GET['page']) && $_GET['page'] == "browse_artworks" || isset($_GET['page']) && $_GET['page'] == "work"){echo 'active';}?>" href="?page=browse_artworks">Browse Artworks</a></li>
+                                <li><a class="nav-link <?php if(isset($_GET['page']) && $_GET['page'] == "browse_genres"){echo 'active';}?>" href="?page=browse_genres">Browse Genres</a></li>
+                                <li><a class="nav-link <?php if(isset($_GET['page']) && $_GET['page'] == "browse_subjects"){echo 'active';}?>" href="?page=browse_subjects">Browse Subjects</a></li>
                             </ul>
                         </li>
                         <li>
