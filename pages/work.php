@@ -1,7 +1,10 @@
 <?php
 include_once "config.php";
 $id = intval($_GET['Id']);
+$longitude = 0;
+$latitude = 0;
 function workData($conn){
+    global $longtitude, $latitude;
     $id = intval($_GET['Id']);
     $sql = "SELECT * FROM `artworks` WHERE ArtWorkID=$id Limit 1";
     $stmt = $conn->prepare($sql);
@@ -13,6 +16,22 @@ function workData($conn){
     }else{
         $img = $result[0]['ImageFileName'] . ".jpg";
     }
+
+    $galleryId = $result[0]["GalleryID"];
+    $sqlGallery = "SELECT * FROM `galleries` WHERE GalleryID=$galleryId Limit 1";
+    $stmtGallery = $conn->prepare($sqlGallery);
+    $stmtGallery->execute();
+    $resultGallery = $stmtGallery->fetchAll(PDO::FETCH_ASSOC);
+    $longitude = $resultGallery[0]["Longitude"];
+    $latitude = $resultGallery[0]["Latitude"];
+
+    // Calculate bounds for the bounding box
+    $delta = 0.002; // Adjust this value to zoom in or out
+    $minLatitude = $latitude - $delta;
+    $maxLatitude = $latitude + $delta;
+    $minLongitude = $longitude - $delta;
+    $maxLongitude = $longitude  + $delta;
+
 //    $img = Check($ima);
     $imageLarge = "./assets/images/works/large/".$img;
     return $output = '<div class="container mb-4">
@@ -65,7 +84,22 @@ function workData($conn){
                                     <th>GoogleLink</th>
                                     <td>'.$result[0]["GoogleLink"].'</td>
                                 </tr>
+
                             </table>
+                            <div class="accordion" id="accordionExample">
+                                <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingOne">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Look at map
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                    <iframe width="425" height="350" src="https://www.openstreetmap.org/export/embed.html?bbox='.$minLongitude.'%2C'.$minLatitude.'%2C'.$maxLongitude.'%2C'.$maxLatitude.'&amp;layer=mapnik" style="border: 1px solid black"></iframe><br/><small><a href="https://www.openstreetmap.org/#map=19/'.$latitude.'/'.$longitude.'View Larger Map</a></small>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>';

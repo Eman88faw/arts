@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $city = filter_input(INPUT_POST, "city", FILTER_SANITIZE_STRING);
     $region = filter_input(INPUT_POST, "region", FILTER_SANITIZE_STRING);
     $country = filter_input(INPUT_POST, "country", FILTER_SANITIZE_STRING);
-    $postal = filter_input(INPUT_POST, "postal", FILTER_SANITIZE_STRING);
+    $postal = filter_input(INPUT_POST, "postal", FILTER_VALIDATE_INT);
     $phone = filter_input(INPUT_POST, "phone", FILTER_SANITIZE_STRING);
     $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
     $password = $_POST["password"];
