@@ -7,13 +7,13 @@ function star($s)
     if(is_double($s)){
         $i = floor($s);
         for ($item = 0; $item < $i; $item++){
-            $output.= '<img src="/assets/images/star.svg" class="star-icon" alt="">';
+            $output.= '<img src="./assets/images/star.svg" class="star-icon" alt="">';
         }
-        $output .= '<img src="/assets/images/star-half.svg" class="star-icon" alt="">';
+        $output .= '<img src="./assets/images/star-half.svg" class="star-icon" alt="">';
     }
     else{
         for ($item = 0; $item < $s; $item++){
-            $output.= '<img src="/assets/images/star.svg" class="star-icon" alt="">';
+            $output.= '<img src="./assets/images/star.svg" class="star-icon" alt="">';
         }
     }
     $html = '<small class="d-block stars">'.$output.'</small>';
