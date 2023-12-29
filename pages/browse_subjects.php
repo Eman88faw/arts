@@ -6,9 +6,9 @@ $c->execute();
 ?>
 
 
-<div class="title bg-dark ">
-    <div class="container">
-        <h1 class="my-5  text-white py-2">Browse Subjects </h1>
+<div class=" bg-dark mb-3">
+    <div class="container title">
+        <h1 class="text-white ">Browse Subjects </h1>
     </div>
 </div>
 <div class="container">

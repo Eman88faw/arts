@@ -30,7 +30,7 @@ function artists($conn)
 //        $img = Check($ima);
         $output .= '<div class="col-md-3 mb-3">
                         <div class="item mb-3">
-                            <a href="index.php?page=work&Id=' . $row['ArtWorkID'] . '">
+                            <a href="?page=work&Id=' . $row['ArtWorkID'] . '">
                                 <img class="d-block w-100" src="' . $ima . '" alt="' . $row['Title'] . '"style="height:250px">
                             </a>
                             <h6 class="text-center bg-dark p-2 text-white">'.$row['Title'].'</h6>
@@ -41,10 +41,10 @@ function artists($conn)
 }
 ?>
 
-<div class="title bg-dark ">
-    <div class="container">
+<div class=" bg-dark  mb-3">
+    <div class="container title">
         <div class="row">
-            <h1 class="my-4 mt-5 text-white py-2">Browse Artworks</h1>
+            <h1 class="text-white">Browse Artworks</h1>
         </div>
     </div>
 </div>

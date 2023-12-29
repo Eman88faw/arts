@@ -22,9 +22,9 @@ function genersData($conn){
 }
 ?>
 
-<div class="title bg-dark ">
-    <div class="container">
-        <h1 class="my-4 mt-5  text-white py-2">Browse Genres</h1>
+<div class=" bg-dark mb-3">
+    <div class="container title">
+        <h1 class="text-white">Browse Genres</h1>
     </div>
 </div>
 <div class="container mb-4">

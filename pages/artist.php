@@ -1,12 +1,21 @@
+
 <?php
 function wishlist($conn){
     if(isset($_SESSION["user_id"])){
         $id = intval($_GET['Id']);
-        $r = check_in_wishlist($conn);
+        $item = [
+            "id" => $id,
+            "title" => get_column_from_tablke($conn, "artists", "ArtistID", $id, "FirstName") .' '. get_column_from_tablke($conn, "artists", "ArtistID", $id, "LastName"),
+            "type" => "artist",
+            "image" => $id,
+        ];
+        $r = isInWishlist($item);
         if(!$r){
             $output = '<form action="?page=artist&Id='.$id.'" method="post">
-                        <input type="hidden" name="item_id" value="'.$id.'">
-                        <input type="hidden" name="item_type" value="artist">
+                        <input type="hidden" name="id" value="'.$item['id'].'">
+                        <input type="hidden" name="title" value="'.$item['title'].'">
+                        <input type="hidden" name="type" value="'.$item['type'].'">
+                        <input type="hidden" name="image" value="'.$item['id'].'">
                         <button type="submit" class="addtowishlist btn btn-dark" >
                             Add To Wishlist
                             <img src="./assets/images/heart.svg" width="30" height="30" class="" alt="">
@@ -15,12 +24,11 @@ function wishlist($conn){
         }
         else{
             $output = '<form action="?page=artist&Id='.$id.'" method="post">
-                        <input type="hidden" name="item_id" value="'.$id.'">
-                        <input type="hidden" name="item_type" value="artist">
+                        <input type="hidden" name="key" value="'.getIndexInWishlist($item).'">
                         <input type="hidden" name="action" value="removeFromWishlist">
                         <button type="submit" class="addtowishlist btn btn-dark" >
                             Remove From Wishlist
-                            <img src="./assets/images/remove.svg" width="30" height="30" class="" alt="">
+                            <img src="./assets/images/remove.svg" width="20" height="30" class="" alt="">
                         </button>  
                     </form>';
         }
@@ -30,7 +38,7 @@ function wishlist($conn){
     }
     return $output;
 }
-function artistData($conn){
+function artistAYData($conn){
     $id = intval($_GET['Id']);
     $sql = "SELECT * FROM `artists` WHERE ArtistID=$id";
     $stmt = $conn->prepare($sql);
@@ -56,14 +64,6 @@ function artistData($conn){
 }
 
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = intval($_GET['Id']);
-    if (!empty($_POST['item_id']) && !empty($_POST['item_type'])) {
-        add_to_wishlist($conn);
-    }
-}
-
-
 function ArtworksperArtist($conn)
 {
     $artist_works = "";
@@ -83,7 +83,7 @@ function ArtworksperArtist($conn)
         $artist_works .= '<div class="col-md-4">
                             <div class="card mb-3">
                                 <div class="card-body p-0">
-                                    <a href="/?page=work&Id=' . $row['ArtWorkID'] . '" title="'.$row['Title'].'" alt="'.$row['Title'].'">
+                                    <a href="?page=work&Id=' . $row['ArtWorkID'] . '" title="'.$row['Title'].'" alt="'.$row['Title'].'">
                                         <img class="d-block w-100" src="' . $img . '" alt="' . $row['Title'] . '"style="width:1000;height:360px">
                                     </a>
                                     <h5 class="text-center py-2">'.$row["Title"].'</h5>
@@ -95,9 +95,9 @@ function ArtworksperArtist($conn)
     return $artist_works;
 }
 ?>
-<div class="title bg-dark ">
-    <div class="container">
-        <h1 class="my-4 mt-5  text-white py-2">Artist </h1>
+<div class=" bg-dark mb-3">
+    <div class="container title">
+        <h1 class="text-white ">Artist </h1>
     </div>
 </div>
 <div class="container mb-4">

@@ -1,118 +1,115 @@
 <?php
-// Start the session if it's not already started
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-define("BURL", "http://localhost/arts/");
-define("ASSETS", "http://localhost/arts/assets/");
+session_start();
+define("BURL", "http://localhost/ema/");
+define("ASSETS", "http://localhost/ema/assets/"); 
 
 define("BL", __DIR__ . "/");
+
+
 // Connect to Database
 include_once(BL . "connDB.php");
+// Check if the wish list array is already in the session ---> Ahmed 
+if (!isset($_SESSION['wishlist'])) {
+    // If not, initialize an empty wish list array
+    $_SESSION['wishlist'] = array();
+    // [id, Title, Image, type, created_at]
+}
 
 // wishlist
-function wishListItem($conn)
+function wishListItem()
 {
     $result = "";
-    $user_id = $_SESSION['user_id'];
-    $sql = "SELECT * FROM `wishlist` WHERE `customer_id`=$user_id";
-    $stmt = $conn->query($sql);
-    $stmt->execute();
-    $wishlistItem = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $wishlistItem = $_SESSION['wishlist'];
+    if(count($wishlistItem) > 0){
+        foreach ($wishlistItem as $key => $item) {
 
-    foreach ($wishlistItem as $item){
-        $id = $item['item_id'];
-        if($item['item_type'] == "work"){
-            $sql = "SELECT ImageFileName, Title FROM `artworks` WHERE `ArtWorkID`=$id";
-            $stmt = $conn->query($sql);
-            $stmt->execute();
-            $workItem = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            if($workItem[0]["ImageFileName"] < 6){
-                $img = "./assets/images/works/medium/0".$workItem[0]["ImageFileName"].".jpg";
+            if ($item['type'] == 'work' && strlen($item["image"]) < 6) {
+                $img = "./assets/images/" . $item['type'] . "s/medium/0" . $item["image"] . ".jpg";
+            } else {
+                $img = "./assets/images/" . $item['type'] . "s/medium/" . $item["image"] . ".jpg";
             }
-            else{
-                $img = "./assets/images/works/medium/".$workItem[0]["ImageFileName"].".jpg";
-            }
-            $result .= '<a href="/?page=work&Id='.$id.'" class="w-100 d-flex border-bottom mb-2">
-                            <img src="'.$img.'" alt="">
-                            <p>'.$workItem[0]["Title"].'<small class="d-block">'.$item["created_at"].'</small></p>
-                            
-                        </a>';
+            $result .= '<div class="whichListItem w-100 d-flex border-bottom mb-2 justify-content-between align-items-center pb-2">
+                            <a href="?page=' . $item["type"] . '&Id=' . $item["id"] . '" >
+                                <img src="' . $img . '" alt="">
+                                <p>' . $item["title"] . '</p>
+                            </a>
+                            <form action="' . $_SERVER['REQUEST_URI'] . '" method="post">
+                                <input type="hidden" name="key" value="' . $key . '">
+                                <input type="hidden" name="action" value="removeFromWishlist">
+                                <button type="submit" class="addtowishlist btn btn-danger btn-sm" >
+                                    <img src="./assets/images/remove.svg" width="24" height="24" class="img-icon" alt="">
+                                </button>  
+                            </form>
+                        </div>';
         }
-        else{
-            $sql = "SELECT FirstName, LastName FROM `artists` WHERE `ArtistID`=$id";
-            $stmt = $conn->query($sql);
-            $stmt->execute();
-            $workItem = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $img = "./assets/images/artists/medium/".$id.".jpg";
-
-            $result .= '<a href="/?page=artist&Id='.$id.'" class="w-100 d-flex border-bottom mb-2">
-                            <img src="'.$img.'" alt="">
-                            <p>'.$workItem[0]["FirstName"].' '. $workItem[0]["LastName"] .' <small class="d-block">'.$item["created_at"].'</small></p>
-                          
-                        </a>';
-        }
+        $result .= '<div class="whichListItem w-100 d-flex mb-2 justify-content-center align-items-center pb-0">
+                            <a href="?page=wishlist" class="btn btn-sm btn-primary">
+                                SHOW ALL
+                            </a>
+                        </div>';
+    }else{
+        $result = "<div class='no-items text-center card-body'><h6>No Items Found.</h6><h6><small>please put any artwork or artist to dislay here</small></h6></div>";
     }
 
 
     return $result;
-
 }
 
 // Add to wishlist
-function add_to_wishlist($conn)
+function addToWishlist($item)
 {
-    if (isset($_POST)) {
-        $item_id = intval($_POST["item_id"]);
-        $item_type = strtolower($_POST["item_type"]);
-        $user_id = intval($_SESSION["user_id"]);
-        if (isset($_POST["action"])) {
-            $sqlget = "DELETE FROM wishlist WHERE item_id=$item_id AND item_type='$item_type' AND customer_id=$user_id";
-            $stmtInsertwishlist = $conn->prepare($sqlget);
-            $stmtInsertwishlist->execute();
-        } else {
-            $sqlget = "SELECT * FROM wishlist WHERE item_id=$item_id AND item_type='$item_type' AND customer_id=$user_id";
-            $stmtInsertwishlist = $conn->prepare($sqlget);
-            $stmtInsertwishlist->execute();
-            $rr = $stmtInsertwishlist->fetchAll(PDO::FETCH_ASSOC);
-            if (count($rr) == 0) {
-                $sql = "INSERT INTO wishlist (item_id, item_type, customer_id) values ($item_id, '$item_type', $user_id)";
-                try {
-                    $stmtInsertwishlist = $conn->prepare($sql);
-                    $stmtInsertwishlist->execute();
-                } catch (PDOException $e) {
-                    echo "Error: " . $e->getMessage();
-                }
-            }
-        }
-
+    if (!isInWishlist($item)) {
+        $_SESSION['wishlist'][] = $item;
     }
 }
 
-// check for work in wishlist
-function check_in_wishlist($conn)
+// Function to remove an item from the wish list
+function removeFromWishlist($item)
 {
-    if (isset($_SESSION["user_id"])) {
-        $work_id = intval($_GET["Id"]);
-        $user_id = intval($_SESSION["user_id"]);
-        $item_type = "work";
-        if($_GET["page"] == "artist"){
-            $item_type = "artist";
-        }
-        $sqlget = "SELECT * FROM wishlist WHERE item_id=$work_id AND item_type='$item_type' AND customer_id=$user_id";
-        $stmtInsertwishlist = $conn->prepare($sqlget);
-        $stmtInsertwishlist->execute();
-        $rr = $stmtInsertwishlist->fetchAll(PDO::FETCH_ASSOC);
-        if (count($rr) > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
+    // Use array_search to find the index of the item in the wish list
+//    $index = array_search($item, $_SESSION['wishlist']);
+    // If the item is found, remove it from the wish list
+    unset($_SESSION['wishlist'][intval($item)]);
 }
 
-// check Data is Not Null
+// Function to check if an item is in the wish list
+
+function isInWishlist($item)
+{
+    return in_array($item, $_SESSION['wishlist']);
+}
+
+function getIndexInWishlist($item)
+{
+    return array_search($item, $_SESSION['wishlist']);
+}
+
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    if(!empty($_POST['action'])){
+        $ite = intval($_POST['key']);
+        removeFromWishlist($ite);
+    }
+    if (!empty($_POST['id']) && !empty($_POST['type']) && empty($_POST['action'])) {
+        $item = [
+            "id" => $_POST['id'],
+            "title" => $_POST['title'],
+            "type" => $_POST['type'],
+            "image" => $_POST['image'],
+        ];
+        addToWishlist($item);
+    }
+}
+
+
+
+
+
+// Function to update the session variable with the current wish list
+
+// check Data is Not Null takes table name and column name and column value
 function chech_for_Data($conn, $table, $idName, $id)
 {
     $sql = "SELECT * FROM `$table` WHERE `$idName`=$id";
@@ -125,3 +122,13 @@ function chech_for_Data($conn, $table, $idName, $id)
         return true;
     }
 }
+
+function get_column_from_tablke($conn, $table, $idName, $id, $column)
+{
+    $sql = "SELECT `$column` FROM `$table` WHERE `$idName`=$id LIMIT 1";
+    $stmt = $conn->query($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result[0][$column];
+}
+

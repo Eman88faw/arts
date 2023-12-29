@@ -37,7 +37,7 @@ function artists($conn)
                             <img class="d-block w-100" src="' . $img . '" alt="' . $row['LastName'] . '" style="height: 250px;width:auto" >
                             <div class="card-body">
                                 '.$artistName.'
-                                <a class="btn mt-2 btn-sm btn-primary" href="/?page=artist&Id=' . $row['ArtistID'] . '" >
+                                <a class="btn mt-2 btn-sm btn-primary" href="?page=artist&Id=' . $row['ArtistID'] . '" >
                                     Show
                                 </a>
                             </div>
@@ -49,10 +49,10 @@ function artists($conn)
 
 ?>
 
-<div class="title bg-dark ">
-    <div class="container">
+<div class=" bg-dark  mb-3">
+    <div class="container title">
         <div class="row">
-            <h1 class="my-4 mt-5 text-white py-2">Browse Artists</h1>
+            <h1 class="text-white">Browse Artists</h1>
         </div>
     </div>
 </div>
