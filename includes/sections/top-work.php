@@ -14,15 +14,15 @@ function TopWorks($conn)
         $rate = intval($double_number);
         $stars = '';
         for ($i=0; $i < $rate; $i++){
-            $stars .= '<img src="/assets/images/star.svg" class="star-icon" alt="">';
+            $stars .= '<img src="./assets/images/star.svg" class="star-icon" alt="">';
         }
         if($double_number > $rate){
-            $stars.= '<img src="/assets/images/star-half.svg" class="star-icon" alt="">';
+            $stars.= '<img src="./assets/images/star-half.svg" class="star-icon" alt="">';
         }
         $html = '<div class="col-md-4">
             <div class="card">
                 <div class="card-image">
-                    <img src="/assets/images/works/small/0'.$row["ImageFileName"]. '.jpg" class="card-img-top" alt="...">
+                    <img src="./assets/images/works/small/0'.$row["ImageFileName"]. '.jpg" class="card-img-top" alt="...">
                     <small class="d-block stars">
                         '.$stars.'
                     </small>
