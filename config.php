@@ -1,7 +1,7 @@
 <?php
 session_start();
-define("BURL", "http://localhost/ema/");
-define("ASSETS", "http://localhost/ema/assets/"); 
+define("BURL", "http://localhost/arts/");
+define("ASSETS", "http://localhost/arts/assets/"); 
 
 define("BL", __DIR__ . "/");
 
