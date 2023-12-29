@@ -30,7 +30,7 @@ function MostReview($conn)
                 <div class="card-body">
                     <h5 class="card-title">' . $row['LastName'] . '
                      <small class="float-end">
-                        <img src=".assets/images/star.svg" width="20" alt=""> ' .$s.'
+                        <img src="./assets/images/star.svg" width="20" alt=""> ' .$s.'
                     </small>
                     </h5>
                     <p id="card-text">' . substr($row['Comment'], 0, 100) . '</p>
